@@ -13,7 +13,7 @@ namespace test_task {
 
 struct my_randomizer {
     std::size_t operator()(std::size_t left_bound,
-                           std::size_t right_bound) {
+                           std::size_t right_bound) const {
         static std::mt19937_64 rnd(0);
         return left_bound + (static_cast<std::size_t>(rnd() % (right_bound - left_bound)));
     }

@@ -14,7 +14,7 @@ namespace {
 
 struct test_randomizer {
 	std::size_t operator()(std::size_t left_bound,
-		                 std::size_t right_bound) {
+		                 std::size_t right_bound) const {
 		static std::mt19937_64 rnd(4);
     	return left_bound + (static_cast<std::size_t>(rnd() % (right_bound - left_bound)));
 	}
@@ -177,7 +177,7 @@ TEST_CASE("constructors") {
 		rc.insert(3);
 		rc.insert(4);
 		rc.insert(5);
-		random_container<int> rc1 = rc;
+		const random_container<int> rc1 = rc;
 		CHECK(is_in_set(rc1.random_element(), 3, 4 ,5));
 	}
 	{
