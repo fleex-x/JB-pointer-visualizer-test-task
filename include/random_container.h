@@ -127,7 +127,7 @@ public:
             return owner->elements[pos];
         }
         T *operator->() const {
-            return *(owner->elements[pos]);
+            return &(owner->elements[pos]);
         }
 
         iterator& operator++() {

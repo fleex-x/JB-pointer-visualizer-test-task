@@ -20,6 +20,12 @@ struct test_randomizer {
 	}
 };
 
+struct myhash {
+	size_t operator()(const std::pair<int, int> &p) const {
+		return std::hash<int>{}(p.first) ^ std::hash<int>{}(p.second);
+	}
+};
+
 
 template<typename T, typename ...Ts> 
 bool is_in_set(T first, Ts ...other) {
@@ -150,6 +156,9 @@ TEST_CASE("iterator") {
 	CHECK(is_in_set(static_cast<int>(*rc.begin()), 3, 4 ,5));
 	CHECK(*(++rc.begin()) == 4);
 	CHECK(*(rc.begin()++) == 3);
+	random_container<std::pair<int, int>, test_randomizer, myhash> rc1;
+	rc1.insert(std::make_pair(5, 4));
+	CHECK(rc1.begin()->first == 5);
 }
 
 TEST_CASE("iterator range-based-for") {
