@@ -11,6 +11,7 @@
 git clone https://github.com/fleex-x/JB-pointer-visualizer-test-task.git
 cd JB-pointer-visualizer-test-task
 cmake .
+make
 ./random-container-tests
 ```
 
