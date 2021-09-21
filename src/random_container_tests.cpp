@@ -210,9 +210,12 @@ TEST_CASE("operators=") {
 		rc.insert(3);
 		rc.insert(4);
 		rc.insert(5);
+		rc.insert(6);
+		rc.insert(7);
 		random_container<int> rc1;
 		rc1 = rc;
-		CHECK(is_in_set(rc1.random_element(), 3, 4 ,5));
+		CHECK(is_in_set(rc1.random_element(), 3, 4 ,5, 6, 7));
+		CHECK(rc.size() == 5);
 	}
 	{
 		random_container<int> rc;

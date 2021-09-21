@@ -19,6 +19,7 @@ struct my_randomizer {
     }
 };
 
+
 template<typename T, 
          typename Randomizer = my_randomizer, 
          typename Hasher = std::hash<T>,
@@ -27,14 +28,14 @@ class random_container {
 private:
     Randomizer randomizer;
     std::vector<T> elements;
-    std::unordered_map<T, std::unordered_set<std::size_t, SizeTHasher>, Hasher> indicies;
+    std::unordered_map<T, std::unordered_set<std::size_t, SizeTHasher>, Hasher> indices;
 public:
 
     random_container() = default;
 
     random_container(Randomizer randomizer_, 
                      Hasher hasher = Hasher()) : randomizer(randomizer_),
-                                                 indicies(0, hasher) {  
+                                                 indices(0, hasher) {  
     }
     
     random_container(const random_container &) = default;
@@ -44,12 +45,12 @@ public:
 
     void insert(const T& new_elem) {
         elements.push_back(new_elem);
-        indicies[new_elem].insert(elements.size() - 1);
+        indices[new_elem].insert(elements.size() - 1);
     }
 
     void insert(T &&new_elem) {
         elements.push_back(std::move(new_elem));
-        indicies[new_elem].insert(elements.size() - 1);
+        indices[new_elem].insert(elements.size() - 1);
     }
 
     template <typename Iter>
@@ -61,20 +62,20 @@ public:
     }
 
     void erase(const T& to_erase) {
-        if (indicies[to_erase].empty()) {
+        if (indices[to_erase].empty()) {
             return;
         }
 
-        std::size_t ind_of_to_erase_element = *(indicies[to_erase].begin());
-        indicies[to_erase].erase(indicies[to_erase].begin());
+        std::size_t ind_of_to_erase_element = *(indices[to_erase].begin());
+        indices[to_erase].erase(indices[to_erase].begin());
         if (ind_of_to_erase_element + 1 == elements.size()) {
             elements.pop_back();
             return;
         }
         
         T &last_elem = elements.back();
-        indicies[last_elem].erase(elements.size() - 1);
-        indicies[last_elem].insert(ind_of_to_erase_element);
+        indices[last_elem].erase(elements.size() - 1);
+        indices[last_elem].insert(ind_of_to_erase_element);
         
         using std::swap;
         swap(elements[ind_of_to_erase_element], elements.back());
@@ -104,7 +105,7 @@ public:
 
     void clear() {
         elements.clear();
-        indicies.clear();
+        indices.clear();
     }
 
     class iterator {
