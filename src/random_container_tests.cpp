@@ -42,7 +42,7 @@ TEST_CASE("Full template parametrs") {
 	rc.insert(5);
 	rc.insert(4);
 	rc.insert(3);
-	rc.insert(std::move(3));
+	rc.insert(3);
 	rc.erase(3);
 	rc.erase(4);
 	CHECK(is_in_set(rc.random_element(), 3, 5));
@@ -68,7 +68,7 @@ TEST_CASE("Small cases") {
 		rc.insert(7);
 		rc.erase(4);
 		rc.erase(5);
-		CHECK(is_in_set(std::move(rc).random_element(), 3, 6, 7));
+		CHECK(is_in_set(rc.random_element(), 3, 6, 7));
 		CHECK(rc.size() == 3);
 	} 
 	{
@@ -194,7 +194,7 @@ TEST_CASE("constructors") {
 		rc.insert(3);
 		rc.insert(4);
 		rc.insert(5);
-		random_container<int> rc1 = std::move(rc);
+		random_container<int> rc1 = rc;
 		CHECK(is_in_set(rc1.random_element(), 3, 4 ,5));
 		rc.clear();
 		rc.insert(6);

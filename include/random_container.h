@@ -83,16 +83,8 @@ public:
         elements.pop_back();
     }
 
-    [[nodiscard]] const T &random_element() const & {
+    [[nodiscard]] const T &random_element() const {
         return elements[randomizer(0, elements.size())];
-    }
-    
-    [[nodiscard]] T &random_element() & {
-        return elements[randomizer(0, elements.size())];
-    }
-
-    [[nodiscard]] T &&random_element() && {
-        return std::move(elements[randomizer(0, elements.size())]);
     }
 
     [[nodiscard]] std::size_t size() const {
@@ -108,69 +100,69 @@ public:
         indices.clear();
     }
 
-    class iterator {
+    class const_iterator {
     private:
         std::size_t pos = 0;
-        random_container *owner = nullptr;
+        const random_container * owner = nullptr;
         friend random_container;
-        iterator(std::size_t pos_, random_container *owner_) : pos(pos_),
+        const_iterator(std::size_t pos_, const random_container * owner_) : pos(pos_),
                                                                owner(owner_) {
         }
     public:
 
-        iterator() = default;
-        iterator(const iterator &) = default;
-        iterator(iterator &&) = default;
-        iterator &operator=(const iterator &) = default;
-        iterator &operator=(iterator &&) = default;
+        const_iterator() = default;
+        const_iterator(const const_iterator &) = default;
+        const_iterator(const_iterator &&) = default;
+        const_iterator &operator=(const const_iterator &) = default;
+        const_iterator &operator=(const_iterator &&) = default;
 
-        T &operator*() const {
+        const T &operator*() const {
             return owner->elements[pos];
         }
-        T *operator->() const {
+        const T *operator->() const {
             return &(owner->elements[pos]);
         }
 
-        iterator& operator++() {
+        const_iterator& operator++() {
             ++pos;
             return *this;
         }
 
-        iterator& operator--() {
+        const_iterator& operator--() {
             --pos;
             return *this;
         }
 
-        iterator operator++(int) {
-            iterator res = *this;
+        const_iterator operator++(int) {
+            const_iterator res = *this;
             ++pos;
             return res;
         }
 
-        iterator operator--(int) {
-            iterator res = *this;
+        const_iterator operator--(int) {
+            const_iterator res = *this;
             --pos;
             return res;
         }
 
-        bool operator==(const iterator &other) {
+        bool operator==(const const_iterator &other) {
             return pos == other.pos && owner == other.owner;
         } 
-        bool operator!=(const iterator &other) {
+        bool operator!=(const const_iterator &other) {
             return !(*this == other);
         } 
 
         explicit operator bool() {
             return owner != nullptr && pos < owner->elements.size();
         }
-    }; // iterator invalidates after random_container changes
+    }; // const_iterator invalidates after random_container changes
 
-    iterator begin() {
-        return iterator(0, this);
+    const_iterator begin() const {
+        return const_iterator(0, this);
     }
 
-    iterator end() {
-        return iterator(size(), this);
+    const_iterator end() const {
+        return const_iterator(size(), this);
     }
 
     ~random_container() = default;
